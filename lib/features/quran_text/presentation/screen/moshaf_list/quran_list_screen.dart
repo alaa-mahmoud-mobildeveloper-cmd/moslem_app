@@ -129,7 +129,7 @@ class QuranListScreen extends StatelessWidget {
                                   "القرآن الكريم",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 46,
+                                    fontSize: 48,
                                     fontWeight: FontWeight.w900,
 
                                   ),
