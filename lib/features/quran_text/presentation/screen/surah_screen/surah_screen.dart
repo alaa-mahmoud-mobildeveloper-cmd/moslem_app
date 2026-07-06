@@ -4,6 +4,7 @@ import 'package:islam_moshaf/di.dart';
 import 'package:islam_moshaf/features/quran_text/presentation/manager/quran_bloc.dart';
 import 'package:islam_moshaf/features/quran_text/presentation/manager/quran_event.dart';
 import 'package:islam_moshaf/features/quran_text/presentation/manager/quran_state.dart';
+import 'package:islam_moshaf/features/quran_text/presentation/widgets/ayah_item.dart';
 
 class SurahScreen extends StatelessWidget {
   static const String routeName = 'surah_screen';
@@ -11,7 +12,10 @@ class SurahScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surahNumber = ModalRoute.of(context)!.settings.arguments as int;
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final int surahNumber = args['surahNumber'];
+    final String arName = args['arName'];
+    final String enName = args['enName'];
 
     return BlocProvider(
       create: (context) =>
@@ -19,7 +23,9 @@ class SurahScreen extends StatelessWidget {
       child: BlocConsumer<QuranBloc, QuranState>(
         builder: (context, state) {
           if (state.status == RequestStatus.loading) {
-            return Scaffold(body: Center(child: CircularProgressIndicator()));
+            return Scaffold(body: Center(child: CircularProgressIndicator(
+              color: Color(0xFF16A34A),
+            )));
           }
 
           if (state.status == RequestStatus.error) {
@@ -44,7 +50,7 @@ class SurahScreen extends StatelessWidget {
                 title: Column(
                   children: [
                     Text(
-                      state.surahDetails!.data!.name ?? "",
+                      arName,
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -52,7 +58,7 @@ class SurahScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      state.surahDetails!.data!.englishName ?? "",
+                      enName,
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -63,25 +69,13 @@ class SurahScreen extends StatelessWidget {
                 ),
                 centerTitle: true,
               ),
-              body: ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                itemCount: model.data!.ayahs!.length,
-                itemBuilder: (context, index) {
-                  final ayah = model.data!.ayahs![index];
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      "${ayah.text}",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Color(0xFF064439),
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  );
-                },
-              ),
+              body: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child:AyahItem(
+                  ayahs: model.data!.ayahs!,
+                  surahNumber: model.data?.number??0,
+                ),
+              )
             );
           }
 

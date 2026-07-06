@@ -1,9 +1,10 @@
+import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:islam_moshaf/core/api/api_manager.dart';
 import 'package:islam_moshaf/core/api/base_url.dart';
 import 'package:islam_moshaf/core/api/endPoint.dart';
 import 'package:islam_moshaf/features/quran_text/data/model/surah_details_model.dart';
-import 'package:islam_moshaf/features/quran_text/data/model/surah_model.dart';
+import 'package:islam_moshaf/features/quran_text/data/model/surah_model.dart' hide Data;
 
 abstract class SurahDs{
   Future<SurahModelAll> getQuranList();
@@ -30,10 +31,29 @@ class SurahDsImpl implements SurahDs{
   @override
   Future<SurahDetailsModel> getSurahDetails(int surahNumber)async {
     try{
-      var response =await apiManager.get("${BaseURl.alQuran}${Endpoints.surahList}/$surahNumber");
-      var data = response.data;
-      SurahDetailsModel surahDetailsModel = SurahDetailsModel.fromJson(data);
-      return surahDetailsModel;
+      String suraFile = await rootBundle.loadString("assets/files/$surahNumber.txt");
+      List<String> suraLines = suraFile.split("\n");
+      List<Ayahs> ayahsList = [];
+      for (int i = 0; i < suraLines.length; i++) {
+        String line = suraLines[i].trim();
+        if (line.isNotEmpty) {
+          ayahsList.add(
+            Ayahs(
+              numberInSurah: i + 1,
+              text: line,
+              sajda: false,
+            ),
+          );
+        }
+      }
+      return SurahDetailsModel(
+        code: 200,
+        status: "success",
+        data: Data(
+          number: surahNumber,
+          ayahs: ayahsList,
+        ),
+      );
     }catch(e){
       rethrow;
     }

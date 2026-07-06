@@ -109,7 +109,13 @@ class Ayahs {
     page = json['page'];
     ruku = json['ruku'];
     hizbQuarter = json['hizbQuarter'];
-    sajda = json['sajda'];
+
+    // الحل هنا: بنشيك لو القيمة اللي جاية عبارة عن Map، بنعتبرها true علطول
+    if (json['sajda'] is Map) {
+      sajda = true;
+    } else {
+      sajda = json['sajda']; // لو جاية false هتنزل false زي ما هي
+    }
   }
 
   Map<String, dynamic> toJson() {
