@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class SearchItem extends StatelessWidget {
-  const SearchItem({super.key});
+  final TextEditingController controller;
+  final ValueChanged<String>? onChanged;
+   SearchItem({super.key,required this.controller,required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,9 @@ class SearchItem extends StatelessWidget {
             ],
           ),
           child: TextFormField(
+            cursorColor:Color(0xFF064E3B),
+            controller: controller,
+            onChanged: onChanged,
             style: const TextStyle(
               color: Color(0xFF064E3B),
               fontSize: 18,

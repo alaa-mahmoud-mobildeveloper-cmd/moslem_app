@@ -20,6 +20,11 @@ import 'features/quran_text/domain/use_case/get_surah_list_use_case.dart'
     as _i797;
 import 'features/quran_text/domain/use_case/get_surah_use_case.dart' as _i140;
 import 'features/quran_text/presentation/manager/quran_bloc.dart' as _i88;
+import 'features/search_quran/data/repo/search_repo_impl.dart' as _i857;
+import 'features/search_quran/data/source/ds.dart' as _i816;
+import 'features/search_quran/domain/repo/search_repo.dart' as _i523;
+import 'features/search_quran/domain/use_case/search_use_case.dart' as _i267;
+import 'features/search_quran/presentation/manager/search_bloc.dart' as _i725;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -29,7 +34,16 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.lazySingleton<_i237.ApiManager>(() => _i237.ApiManager());
+    gh.factory<_i816.SearchDs>(
+      () => _i816.SearchDsImpl(gh<_i237.ApiManager>()),
+    );
+    gh.factory<_i523.SearchRepo>(
+      () => _i857.SearchRepoImpl(gh<_i816.SearchDs>()),
+    );
     gh.factory<_i328.SurahDs>(() => _i328.SurahDsImpl(gh<_i237.ApiManager>()));
+    gh.factory<_i267.SearchUseCase>(
+      () => _i267.SearchUseCase(gh<_i523.SearchRepo>()),
+    );
     gh.factory<_i78.SurahRepo>(() => _i817.SurahRepoImpl(gh<_i328.SurahDs>()));
     gh.factory<_i797.GetSurahListUseCase>(
       () => _i797.GetSurahListUseCase(gh<_i78.SurahRepo>()),
@@ -42,6 +56,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i797.GetSurahListUseCase>(),
         gh<_i140.GetSurahUseCase>(),
       ),
+    );
+    gh.factory<_i725.SearchBloc>(
+      () => _i725.SearchBloc(gh<_i267.SearchUseCase>()),
     );
     return this;
   }

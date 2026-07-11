@@ -7,10 +7,9 @@ import 'package:islam_moshaf/features/quran_text/presentation/manager/quran_bloc
 import 'package:islam_moshaf/features/quran_text/presentation/manager/quran_event.dart';
 import 'package:islam_moshaf/features/quran_text/presentation/manager/quran_state.dart';
 import 'package:islam_moshaf/features/quran_text/presentation/screen/surah_screen/surah_screen.dart';
-import 'package:islam_moshaf/features/quran_text/presentation/widgets/icon_bar.dart';
-import 'package:islam_moshaf/features/quran_text/presentation/widgets/search_item.dart';
 import 'package:islam_moshaf/features/quran_text/presentation/widgets/surah_item_widget.dart';
 import 'package:islam_moshaf/features/quran_text/presentation/widgets/titel_item.dart';
+import 'package:islam_moshaf/features/search_quran/presentation/screen/search_quran_screen.dart';
 
 class QuranListScreen extends StatefulWidget {
   static const String routeName = 'quran_list_screen';
@@ -26,7 +25,7 @@ class _QuranListScreenState extends State<QuranListScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     controller = ScrollController();
   }
@@ -117,7 +116,14 @@ class _QuranListScreenState extends State<QuranListScreen> {
                                SliverToBoxAdapter(
                                  child: TitleItem(
                                    number: model?.length ?? 0,
-                                   title: 'القرآن الكريم',),
+                                   title: 'القرآن الكريم',
+                                   onTap: () {
+                                     Navigator.pushNamed(context, SearchQuranScreen.routeName);
+                                   },
+                                   onBack: () {
+                                     Navigator.pop(context);
+                                   },
+                                 ),
 
                                ),
 

@@ -7,8 +7,7 @@ class TitleItem extends StatelessWidget {
   int number;
   String title;
   VoidCallback onTap;
-  VoidCallback onBack;
-  TitleItem({super.key, required this.number,required this.title,required this.onBack,required this.onTap});
+  TitleItem({super.key, required this.number,required this.title,required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +19,25 @@ class TitleItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
           children: [
-            GestureDetector(
-              onTap: onBack,
-              child: IconsBar(
-                icon: Icons.arrow_back_ios_new,),
+            ShaderMask(
+              shaderCallback: (bounds) {
+                return const LinearGradient(
+                  colors: [
+                    Color(0xFF15803D),
+                    Color(0xFF22C55E),
+                  ],
+                ).createShader(bounds);
+              },
+              child:  Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 48,
+                  fontWeight: FontWeight.w900,
+
+                ),
+                textAlign: TextAlign.start,
+              ),
             ),
 
             GestureDetector(
@@ -32,26 +46,6 @@ class TitleItem extends StatelessWidget {
                 icon: Icons.search,),
             ),
           ],
-        ),
-        ShaderMask(
-          shaderCallback: (bounds) {
-            return const LinearGradient(
-              colors: [
-                Color(0xFF15803D),
-                Color(0xFF22C55E),
-              ],
-            ).createShader(bounds);
-          },
-          child:  Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 48,
-              fontWeight: FontWeight.w900,
-
-            ),
-            textAlign: TextAlign.start,
-          ),
         ),
         Container(
           padding:
